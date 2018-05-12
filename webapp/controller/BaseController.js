@@ -27,6 +27,15 @@ sap.ui.define([
 		value: "1688831"
 	}, {
 		type: "customer",
+		value: "0001034417"
+	},{
+		type: "customer",
+		value: "0001011896"
+	},{
+		type: "customer",
+		value: "0000026075"
+	},{
+		type: "customer",
 		value: "1372500"
 	}, {
 		type: "search",
@@ -37,12 +46,15 @@ sap.ui.define([
 		INPROCESS: "E0002"
 	};
 	return Controller.extend("pinaki.sap.com.SupportDashing.controller.BaseController", {
-		onAfterRendering: function() {
-			var aCurrentIssuePromise = this.createCurrentIssueSearchString();
-			Promise.all(aCurrentIssuePromise).then(function(e) {
-				this.processCurrentIssueData(e);
-			}.bind(this)).catch(function(e) {
-				this.processCurrentIssueData(e);
+		loadData: function() {
+			return new Promise(function(resolve,reject){
+				var aCurrentIssuePromise = this.createCurrentIssueSearchString();
+				Promise.all(aCurrentIssuePromise).then(function(e) {
+					this.processCurrentIssueData(e);
+					resolve();
+				}.bind(this)).catch(function(e) {
+					reject();
+				}.bind(this));
 			}.bind(this));
 		},
 		createCurrentIssueSearchString: function() {
@@ -81,7 +93,7 @@ sap.ui.define([
 			});
 			var groupedCustomerData = this.groupByCustomer(aCurrentIssueData);
 			this.getView().getModel().setData({
-				"currentIssueByCustomer": groupedCustomerData.splice(0,15)
+				"currentIssueByCustomer": groupedCustomerData
 			}, true);
 		},
 		groupByCustomer: function(aCurrentIssueData) {
@@ -89,7 +101,6 @@ sap.ui.define([
 			var aDistinctCustomer = [];
 			var aNewStatus = [];
 			var aInProcessStatus = [];
-			var currentIssueByCustomer = [];
 			//Remove Duplicate Entries
 			for (var i = 0; i < aCurrentIssueData.length; ++i) {
 				for (var j = i + 1; j < aCurrentIssueData.length; ++j) {
@@ -114,14 +125,12 @@ sap.ui.define([
 					aInProcessStatus[index] = aInProcessStatus[index] + 1;
 				}
 			});
-			for (var k = 0; k < aDistinctCustomer.length; k++) {
-				currentIssueByCustomer.push({
-					customerName: aDistinctCustomer[k],
-					newIssue: aNewStatus[k],
-					inProcessIssue: aInProcessStatus[k]
-				});
-			}
-			return currentIssueByCustomer;
+			return {
+				aDistinctCustomer : aDistinctCustomer,
+				aNewStatus : aNewStatus,
+				aInProcessStatus : aInProcessStatus
+				
+			};
 		}
 	});
 });

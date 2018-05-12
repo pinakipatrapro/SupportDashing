@@ -9,7 +9,7 @@
 	<App id="idAppControl" class="sapUiSizeCompact">
 		<pages>
 			<Page showHeader="false">
-				<l:Grid	defaultSpan="L2 M4 S6" width="100%">
+				<l:Grid	defaultSpan="L12 M12 S12" width="100%">
 					<core:Fragment fragmentName="pinaki.sap.com.SupportDashing.widgets.CurrentIssueStatus" type="JS"/>	
 				</l:Grid>
 			</Page>

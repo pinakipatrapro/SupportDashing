@@ -1,1 +1,4 @@
-/* Enter your custom styles here */
+html.sap-desktop .sapMShellCentralBox {
+    border-right: 0px solid #999999;
+    border-left: 0px solid #999999;
+}
