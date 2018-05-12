@@ -60,6 +60,12 @@
 				"settings": {
 					"bundleName": "pinaki.sap.com.SupportDashing.i18n.i18n"
 				}
+			},
+			"": {
+				"type": "sap.ui.model.json.JSONModel"
+			},
+			"viewConfig": {
+				"type": "sap.ui.model.json.JSONModel"
 			}
 		},
 		"resources": {

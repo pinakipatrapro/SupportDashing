@@ -20,12 +20,21 @@ sap.ui.define([
 		type: "customer",
 		value: "287386"
 	}, {
+		type: "customer",
+		value: "186849"
+	}, {
+		type: "customer",
+		value: "1688831"
+	}, {
+		type: "customer",
+		value: "1372500"
+	}, {
 		type: "search",
-		value: "0090FAE68ED01ED7B8CB249B5FB240D3"
+		value: "0090FAE68C681ED895BEFA93B41080D4"
 	}];
 	var statusKey = {
-		NEW : "E0001",
-		INPROCESS : "E0002"
+		NEW: "E0001",
+		INPROCESS: "E0002"
 	};
 	return Controller.extend("pinaki.sap.com.SupportDashing.controller.BaseController", {
 		onAfterRendering: function() {
@@ -70,7 +79,10 @@ sap.ui.define([
 			aData.forEach(function(e) {
 				aCurrentIssueData = aCurrentIssueData.concat(e.DATA);
 			});
-			this.groupByCustomer(aCurrentIssueData);
+			var groupedCustomerData = this.groupByCustomer(aCurrentIssueData);
+			this.getView().getModel().setData({
+				"currentIssueByCustomer": groupedCustomerData.splice(0,15)
+			}, true);
 		},
 		groupByCustomer: function(aCurrentIssueData) {
 			//Move logic to web Worker to improve performance
@@ -86,23 +98,27 @@ sap.ui.define([
 				}
 			}
 			aCurrentIssueData.forEach(function(e) {
-				if(aDistinctCustomer.indexOf(e.CUST_NAME) < 0 ){
+				if (aDistinctCustomer.indexOf(e.CUST_NAME) < 0) {
 					aDistinctCustomer.push(e.CUST_NAME);
 				}
 				var index = aDistinctCustomer.indexOf(e.CUST_NAME);
-				if(e.STATUS_KEY === statusKey.NEW){
-					if(!aNewStatus[index]){aNewStatus[index] = 0;}
+				if (e.STATUS_KEY === statusKey.NEW) {
+					if (!aNewStatus[index]) {
+						aNewStatus[index] = 0;
+					}
 					aNewStatus[index] = aNewStatus[index] + 1;
-				}else if(e.STATUS_KEY === statusKey.INPROCESS){
-					if(!aInProcessStatus[index]){aInProcessStatus[index] = 0;}
+				} else if (e.STATUS_KEY === statusKey.INPROCESS) {
+					if (!aInProcessStatus[index]) {
+						aInProcessStatus[index] = 0;
+					}
 					aInProcessStatus[index] = aInProcessStatus[index] + 1;
 				}
 			});
-			for(var k =0;k<aDistinctCustomer.length;k++){
+			for (var k = 0; k < aDistinctCustomer.length; k++) {
 				currentIssueByCustomer.push({
-					customerName : aDistinctCustomer[k],
-					newIssue : aNewStatus[k],
-					inProcessIssue : aInProcessStatus[k]
+					customerName: aDistinctCustomer[k],
+					newIssue: aNewStatus[k],
+					inProcessIssue: aInProcessStatus[k]
 				});
 			}
 			return currentIssueByCustomer;

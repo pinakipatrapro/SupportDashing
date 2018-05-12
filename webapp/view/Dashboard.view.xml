@@ -6,12 +6,13 @@
 	xmlns="sap.m"
 	xmlns:l="sap.ui.layout"
 	xmlns:viz="sap.viz.ui5.controls">
-	<App id="idAppControl" class="sapContrast sapContrastPlus">
+	<App id="idAppControl" class="sapUiSizeCompact">
 		<pages>
-			<l:Grid
-				defaultSpan="L12 M12 S12" class="sapUiSmallMargin">
-			<core:Fragment fragmentName="pinaki.sap.com.SupportDashing.widgets.CurrentIssueStatus" type="JS"/>	
-			</l:Grid>
+			<Page showHeader="false">
+				<l:Grid	defaultSpan="L2 M4 S6" width="100%">
+					<core:Fragment fragmentName="pinaki.sap.com.SupportDashing.widgets.CurrentIssueStatus" type="JS"/>	
+				</l:Grid>
+			</Page>
 		</pages>
 	</App>
 </mvc:View>
