@@ -3,9 +3,9 @@ sap.ui.define([
 ], function(BaseController) {
 	"use strict";
 
-	return BaseController.extend("pinaki.sap.com.SupportDashing.widgets.", {
+	return BaseController.extend("pinaki.sap.com.SupportDashing.widgets.IssuesOverPastWeek", {
 		loadChart: function(model, chartId) {
-			var maxBars = 7;
+			var maxBars = 5;
 
 			if (window.IssueOverPastWeek)
 				window.clearInterval(window.IssueOverPastWeek);
@@ -39,8 +39,8 @@ sap.ui.define([
 				labels: model.getData().currentIssueByCustomer.aDistinctCustomer.slice(lowerRange, upperRange),
 				datasets: [{
 					label: "Issues",
-					backgroundColor: 'rgb(168, 234, 255)',
-					borderColor: 'rgb(237, 250, 255)',
+					backgroundColor: 'rgba(168, 234, 255,.1)',
+					borderColor: 'rgb(168, 234, 255)',
 					data: model.getData().issuesOverPastWeek.aCount.slice(lowerRange, upperRange),
 					type: 'line'
 				}]
@@ -51,13 +51,11 @@ sap.ui.define([
 				title: {
 					display: true,
 					text: 'Issues over past week',
-					fontColor: 'white'
+					fontColor: 'white',
+					padding: 30
 				},
 				legend: {
-					labels: {
-						fontColor: 'white',
-						defaultFontSize: 16
-					}
+					display: false
 				},
 				animation: {
 					onComplete: function() {
@@ -94,8 +92,7 @@ sap.ui.define([
 							autoSkip: false,
 							maxRotation: 0,
 							minRotation: 0,
-							fontColor: "white",
-							fontSize: 14
+							fontSize: 12
 						}
 					}],
 					yAxes: [{

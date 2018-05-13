@@ -12,6 +12,7 @@
 				<l:Grid	defaultSpan="L12 M12 S12" width="100%">
 					<core:Fragment fragmentName="pinaki.sap.com.SupportDashing.widgets.CurrentIssueStatus" type="JS"/>	
 					<core:Fragment fragmentName="pinaki.sap.com.SupportDashing.widgets.IssuesOverPastWeek" type="JS"/>	
+					<core:Fragment fragmentName="pinaki.sap.com.SupportDashing.widgets.IRTAlert" type="JS"/>	
 				</l:Grid>
 			</Page>
 		</pages>

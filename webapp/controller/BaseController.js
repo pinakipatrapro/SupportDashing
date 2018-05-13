@@ -37,10 +37,10 @@ sap.ui.define([
 	}, {
 		type: "customer",
 		value: "1372500"
-	}/*, {
+	}, {
 		type: "search",
 		value: "0090FAE68C681ED895BEFA93B41080D4"
-	}*/];
+	}];
 	var statusKey = {
 		NEW: "E0001",
 		INPROCESS: "E0002"
@@ -179,7 +179,7 @@ sap.ui.define([
 			var aExpiringIRT = [];
 			var currentDate = new Date().toISOString().slice(0, 10).replace(/-/g, "") + "000000";
 			aCurrentIssueData.forEach(function(e) {
-				if (e.IRT_FUL === 0 && e.IRT_EXPIRY > currentDate) {
+				if (e.IRT_FUL === 0 && e.IRT_EXPIRY > currentDate && e.STATUS_KEY === statusKey.NEW) {
 					aExpiringIRT.push(e);
 				}
 			});

@@ -3,14 +3,14 @@ sap.ui.define([
 ], function(BaseController) {
 	"use strict";
 
-	return BaseController.extend("pinaki.sap.com.SupportDashing.widgets.CurrentIssueStatusController", {
+	return BaseController.extend("pinaki.sap.com.SupportDashing.widgets.IRTAlert", {
 		loadChart: function(model, chartId) {
-			var maxBars = 15;
+			var maxBars = 5;
 
-			if (window.currentIssueInterval)
-				window.clearInterval(window.currentIssueInterval);
+			if (window.IRTAlert)
+				window.clearInterval(window.IRTAlert);
 
-			var totalDatasets = model.getData().currentIssueByCustomer.aDistinctCustomer;
+			var totalDatasets = model.getData().expiringIRT.aDistinctCustomer;
 			if (totalDatasets.length < maxBars) {
 				var options = this.generateOptions();
 				var dataset = this.generateDataset(model, 0, maxBars);
@@ -19,7 +19,7 @@ sap.ui.define([
 			} else {
 				var lowerRange = 0;
 				var upperRange = maxBars;
-				window.currentIssueInterval = setInterval(function() {
+				window.IRTAlert = setInterval(function() {
 					if (upperRange > totalDatasets.length) {
 						upperRange = 0;
 					}
@@ -36,21 +36,13 @@ sap.ui.define([
 		},
 		generateDataset: function(model, lowerRange, upperRange) {
 			return {
-				labels: model.getData().currentIssueByCustomer.aDistinctCustomer.slice(lowerRange, upperRange),
+				labels: model.getData().expiringIRT.aDistinctCustomer.slice(lowerRange, upperRange),
 				datasets: [{
-					label: "New",
-					backgroundColor: "rgba(255, 0, 0,.2)",
-					borderColor : "rgb(255, 0, 0)",
-					borderWidth : 2,
-					data: model.getData().currentIssueByCustomer.aNewStatus.slice(lowerRange, upperRange),
-					type: 'bar'
-				}, {
-					label: "In Process",
-					backgroundColor: "rgba(255, 238, 0,.2)",
-					borderColor : "rgb(255, 238, 0)",
-					borderWidth : 2,
-					data: model.getData().currentIssueByCustomer.aInProcessStatus.slice(lowerRange, upperRange),
-					type: 'bar'
+					label: "Open IRT",
+					backgroundColor: "rgba(67, 0, 252,.2)",
+					borderColor: "rgb(67, 0, 252)",
+					data: model.getData().expiringIRT.aCount.slice(lowerRange, upperRange),
+					type: 'radar'
 				}]
 			};
 		},
@@ -58,9 +50,8 @@ sap.ui.define([
 			return {
 				title: {
 					display: true,
-					text: 'Current Issue Status',
-					fontColor: 'white',
-					padding: 30
+					text: 'IRT Alerts',
+					fontColor: 'white'
 				},
 				legend: {
 					display: false
@@ -76,50 +67,36 @@ sap.ui.define([
 						datasets.forEach(function(dataset, i) {
 							ctx.font = "15px";
 							switch (dataset.type) {
-								case "line":
+								case "radar":
 									ctx.fillStyle = "white";
 									chart.getDatasetMeta(i).data.forEach(function(p, j) {
 										ctx.fillText(datasets[i].data[j], p._model.x, p._model.y + 20);
-									});
-									break;
-								case "bar":
-									ctx.fillStyle = "white";
-									chart.getDatasetMeta(i).data.forEach(function(p, j) {
-										if (datasets[i].data[j] > 0) {
-											ctx.fillText(datasets[i].data[j], p._model.x, p._model.y - 20);
-										}
 									});
 									break;
 							}
 						});
 					}
 				},
-				scales: {
-					xAxes: [{
-						stacked: true,
-						ticks: {
-							autoSkip: false,
-							maxRotation: 0,
-							minRotation: 0
-						},
-						gridLines: {
-							display: true
-						}
-					}],
-					yAxes: [{
-						stacked: true,
+				scale: {
+					pointLabels: {
+						fontSize: 12
+					},
+					ticks: {
 						display: false,
-						gridLines: {
-							display: true
-						}
-					}]
+						beginAtZero: true
+					}
+				},
+				elements: {
+					line: {
+						tension: 0.000001
+					}
 				},
 				responsive: true
 			};
 		},
 		generateChart: function(dataset, options, ctx) {
 			return new Chart(ctx, {
-				type: 'bar',
+				type: 'radar',
 				data: dataset,
 				options: options,
 				plugins: [{
