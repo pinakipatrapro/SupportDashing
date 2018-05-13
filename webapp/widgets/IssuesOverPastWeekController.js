@@ -3,14 +3,14 @@ sap.ui.define([
 ], function(BaseController) {
 	"use strict";
 
-	return BaseController.extend("pinaki.sap.com.SupportDashing.widgets.CurrentIssueStatusController", {
+	return BaseController.extend("pinaki.sap.com.SupportDashing.widgets.", {
 		loadChart: function(model, chartId) {
-			var maxBars = 15;
+			var maxBars = 7;
 
-			if (window.currentIssueInterval)
-				window.clearInterval(window.currentIssueInterval);
+			if (window.IssueOverPastWeek)
+				window.clearInterval(window.IssueOverPastWeek);
 
-			var totalDatasets = model.getData().currentIssueByCustomer.aDistinctCustomer;
+			var totalDatasets = model.getData().issuesOverPastWeek.aDistinctCustomer;
 			if (totalDatasets.length < maxBars) {
 				var options = this.generateOptions();
 				var dataset = this.generateDataset(model, 0, maxBars);
@@ -19,17 +19,17 @@ sap.ui.define([
 			} else {
 				var lowerRange = 0;
 				var upperRange = maxBars;
-				window.currentIssueInterval = setInterval(function() {
-					if (upperRange > totalDatasets.length) {
-						upperRange = 0;
-					}
-					lowerRange = upperRange;
-					upperRange = upperRange + maxBars;
+				window.IssueOverPastWeek = setInterval(function() {
+				if (upperRange > totalDatasets.length) {
+					upperRange = 0;
+				}
+				lowerRange = upperRange;
+				upperRange = upperRange + maxBars;
 
-					options = this.generateOptions();
-					dataset = this.generateDataset(model, lowerRange, upperRange);
-					ctx = document.getElementById(chartId).getContext('2d');
-					this.generateChart(dataset, options, ctx);
+				options = this.generateOptions();
+				dataset = this.generateDataset(model, lowerRange, upperRange);
+				ctx = document.getElementById(chartId).getContext('2d');
+				this.generateChart(dataset, options, ctx);
 
 				}.bind(this), maxBars * 1000);
 			}
@@ -38,15 +38,11 @@ sap.ui.define([
 			return {
 				labels: model.getData().currentIssueByCustomer.aDistinctCustomer.slice(lowerRange, upperRange),
 				datasets: [{
-					label: "New",
-					backgroundColor: "rgb(255, 158, 158)",
-					data: model.getData().currentIssueByCustomer.aNewStatus.slice(lowerRange, upperRange),
-					type: 'bar'
-				}, {
-					label: "In Process",
-					backgroundColor: "rgb(255, 240, 158)",
-					data: model.getData().currentIssueByCustomer.aInProcessStatus.slice(lowerRange, upperRange),
-					type: 'bar'
+					label: "Issues",
+					backgroundColor: 'rgb(168, 234, 255)',
+					borderColor: 'rgb(237, 250, 255)',
+					data: model.getData().issuesOverPastWeek.aCount.slice(lowerRange, upperRange),
+					type: 'line'
 				}]
 			};
 		},
@@ -54,7 +50,7 @@ sap.ui.define([
 			return {
 				title: {
 					display: true,
-					text: 'Current Issue Status',
+					text: 'Issues over past week',
 					fontColor: 'white'
 				},
 				legend: {
@@ -75,7 +71,7 @@ sap.ui.define([
 							ctx.font = "15px";
 							switch (dataset.type) {
 								case "line":
-									ctx.fillStyle = "Black";
+									ctx.fillStyle = "white";
 									chart.getDatasetMeta(i).data.forEach(function(p, j) {
 										ctx.fillText(datasets[i].data[j], p._model.x, p._model.y - 20);
 									});
@@ -94,23 +90,16 @@ sap.ui.define([
 				},
 				scales: {
 					xAxes: [{
-						stacked: true,
 						ticks: {
 							autoSkip: false,
 							maxRotation: 0,
 							minRotation: 0,
-							fontColor: "white"
-						},
-						gridLines: {
-							display: true
+							fontColor: "white",
+							fontSize: 14
 						}
 					}],
 					yAxes: [{
-						stacked: true,
-						display: false,
-						gridLines: {
-							display: true
-						}
+						display: false
 					}]
 				},
 				responsive: true
@@ -118,7 +107,7 @@ sap.ui.define([
 		},
 		generateChart: function(dataset, options, ctx) {
 			return new Chart(ctx, {
-				type: 'bar',
+				type: 'line',
 				data: dataset,
 				options: options,
 				plugins: [{
