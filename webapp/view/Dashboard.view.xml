@@ -6,8 +6,8 @@
 	xmlns="sap.m"
 	xmlns:l="sap.ui.layout"
 	xmlns:viz="sap.viz.ui5.controls">
-	<App id="idAppControl" class="sapUiSizeCompact">
-		<pages>
+	<App id="idAppControl" class="sapUiSizeCompact steelBG">
+		<pages> 
 			<Page showHeader="false">
 				<l:Grid	defaultSpan="L12 M12 S12" width="100%">
 					<core:Fragment fragmentName="pinaki.sap.com.SupportDashing.widgets.CurrentIssueStatus" type="JS"/>	

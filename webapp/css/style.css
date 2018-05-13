@@ -2,3 +2,9 @@ html.sap-desktop .sapMShellCentralBox {
     border-right: 0px solid #999999;
     border-left: 0px solid #999999;
 }
+.sapMShellBrandingBar {
+    background-color: #427cac00;
+}
+.steelBG {
+	background-image: linear-gradient(to bottom, #252525, #202020, #1c1c1c, #171717, #121212);
+}

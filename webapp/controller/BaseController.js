@@ -37,10 +37,10 @@ sap.ui.define([
 	},{
 		type: "customer",
 		value: "1372500"
-	}, {
-		type: "search",
-		value: "0090FAE68C681ED895BEFA93B41080D4"
-	}];
+		}/*, {
+			type: "search",
+			value: "0090FAE68C681ED895BEFA93B41080D4"
+		}*/];
 	var statusKey = {
 		NEW: "E0001",
 		INPROCESS: "E0002"
@@ -111,6 +111,8 @@ sap.ui.define([
 			aCurrentIssueData.forEach(function(e) {
 				if (aDistinctCustomer.indexOf(e.CUST_NAME) < 0) {
 					aDistinctCustomer.push(e.CUST_NAME);
+					aNewStatus.push(0);
+					aInProcessStatus.push(0);
 				}
 				var index = aDistinctCustomer.indexOf(e.CUST_NAME);
 				if (e.STATUS_KEY === statusKey.NEW) {
@@ -125,6 +127,9 @@ sap.ui.define([
 					aInProcessStatus[index] = aInProcessStatus[index] + 1;
 				}
 			});
+			for(var l = 0 ; l < aDistinctCustomer.length; l++){
+				aDistinctCustomer[l] = aDistinctCustomer[l].split(' ').join('\n');
+			}
 			return {
 				aDistinctCustomer : aDistinctCustomer,
 				aNewStatus : aNewStatus,
