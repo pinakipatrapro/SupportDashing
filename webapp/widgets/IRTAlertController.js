@@ -5,7 +5,7 @@ sap.ui.define([
 
 	return BaseController.extend("pinaki.sap.com.SupportDashing.widgets.IRTAlert", {
 		loadChart: function(model, chartId) {
-			var maxBars = 5;
+			var maxBars =7;
 
 			if (window.IRTAlert)
 				window.clearInterval(window.IRTAlert);

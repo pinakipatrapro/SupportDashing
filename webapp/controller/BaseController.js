@@ -37,10 +37,10 @@ sap.ui.define([
 	}, {
 		type: "customer",
 		value: "1372500"
-	}, {
+	}/*, {
 		type: "search",
 		value: "0090FAE68C681ED895BEFA93B41080D4"
-	}];
+	}*/];
 	var statusKey = {
 		NEW: "E0001",
 		INPROCESS: "E0002"
@@ -106,6 +106,7 @@ sap.ui.define([
 			}
 			this.groupByDate(aCurrentIssueData);
 			this.getIrtAlert(aCurrentIssueData);
+			this.incidentCategory(aCurrentIssueData);
 			return aCurrentIssueData;
 		},
 		groupByCustomer: function(aCurrentIssueData) {
@@ -200,6 +201,28 @@ sap.ui.define([
 			this.getView().getModel().setData({
 				"expiringIRT": {
 					aDistinctCustomer: aDistinctCustomer,
+					aCount: aCount
+				}
+			}, true);
+		},
+		incidentCategory : function(aCurrentIssueData){
+			var aCategories = ["Very High","High","Medium","Low"];
+			var aCount = [0,0,0,0];
+			aCurrentIssueData.forEach(function(e){
+				switch(e.PRIORITY_KEY){
+					case "1":
+						aCount[0] = aCount[0] + 1;break;
+					case "3":
+						aCount[1] = aCount[1] + 1;break;
+					case "5":
+						aCount[2] = aCount[2] + 1;break;
+					case "9":
+						aCount[3] = aCount[3] + 1;break;
+				}
+			});
+			this.getView().getModel().setData({
+				"issueCategory": {
+					aCategories: aCategories,
 					aCount: aCount
 				}
 			}, true);

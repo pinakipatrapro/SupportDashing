@@ -122,6 +122,7 @@ sap.ui.define([
 				type: 'bar',
 				data: dataset,
 				options: options,
+				barPercentage : .7,
 				plugins: [{
 					beforeInit: function(chart) {
 						chart.data.labels.forEach(function(e, i, a) {

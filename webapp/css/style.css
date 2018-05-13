@@ -6,5 +6,6 @@ html.sap-desktop .sapMShellCentralBox {
     background-color: #427cac00;
 }
 .steelBG {
-	background-image: linear-gradient(to bottom, #252525, #202020, #1c1c1c, #171717, #121212);
+background-image: linear-gradient(to bottom, #000000, #030202, #070404, #0a0606, #0d0807);
+	
 }
