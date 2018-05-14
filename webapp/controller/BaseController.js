@@ -37,10 +37,10 @@ sap.ui.define([
 	}, {
 		type: "customer",
 		value: "1372500"
-	}, {
+	}/*, {
 		type: "search",
 		value: "0090FAE68C681ED895BEFA93B41080D4"
-	}];
+	}*/];
 	var statusKey = {
 		NEW: "E0001",
 		INPROCESS: "E0002"
