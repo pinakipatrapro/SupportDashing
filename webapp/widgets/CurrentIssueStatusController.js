@@ -5,7 +5,7 @@ sap.ui.define([
 
 	return BaseController.extend("pinaki.sap.com.SupportDashing.widgets.CurrentIssueStatusController", {
 		loadChart: function(model, chartId) {
-			var maxBars = 15;
+			var maxBars = 30;
 
 			if (window.currentIssueInterval)
 				window.clearInterval(window.currentIssueInterval);
@@ -31,7 +31,7 @@ sap.ui.define([
 					ctx = document.getElementById(chartId).getContext('2d');
 					this.generateChart(dataset, options, ctx);
 
-				}.bind(this), maxBars * 1000);
+				}.bind(this), 5000);
 			}
 		},
 		generateDataset: function(model, lowerRange, upperRange) {
@@ -41,16 +41,16 @@ sap.ui.define([
 					label: "New",
 					backgroundColor: "rgba(255, 0, 0,.2)",
 					borderColor : "rgb(255, 0, 0)",
-					borderWidth : 2,
+					borderWidth : 1,
 					data: model.getData().currentIssueByCustomer.aNewStatus.slice(lowerRange, upperRange),
-					type: 'bar'
+					type: 'horizontalBar'
 				}, {
 					label: "In Process",
 					backgroundColor: "rgba(255, 238, 0,.2)",
 					borderColor : "rgb(255, 238, 0)",
-					borderWidth : 2,
+					borderWidth : 1,
 					data: model.getData().currentIssueByCustomer.aInProcessStatus.slice(lowerRange, upperRange),
-					type: 'bar'
+					type: 'horizontalBar'
 				}]
 			};
 		},
@@ -82,11 +82,11 @@ sap.ui.define([
 										ctx.fillText(datasets[i].data[j], p._model.x, p._model.y + 20);
 									});
 									break;
-								case "bar":
+								case "horizontalBar":
 									ctx.fillStyle = "white";
 									chart.getDatasetMeta(i).data.forEach(function(p, j) {
 										if (datasets[i].data[j] > 0) {
-											ctx.fillText(datasets[i].data[j], p._model.x, p._model.y - 20);
+											ctx.fillText(datasets[i].data[j], p._model.x- 20, p._model.y);
 										}
 									});
 									break;
@@ -98,6 +98,7 @@ sap.ui.define([
 					xAxes: [{
 						stacked: true,
 						ticks: {
+							fontColor: 'white',
 							autoSkip: false,
 							maxRotation: 0,
 							minRotation: 0
@@ -107,8 +108,12 @@ sap.ui.define([
 						}
 					}],
 					yAxes: [{
+						fontColor: 'white',
 						stacked: true,
-						display: false,
+						display: true,
+						ticks: {
+							fontColor: 'white'
+						},
 						gridLines: {
 							display: true
 						}
@@ -119,19 +124,19 @@ sap.ui.define([
 		},
 		generateChart: function(dataset, options, ctx) {
 			return new Chart(ctx, {
-				type: 'bar',
+				type: 'horizontalBar',
 				data: dataset,
 				options: options,
 				barPercentage : .7,
-				plugins: [{
-					beforeInit: function(chart) {
-						chart.data.labels.forEach(function(e, i, a) {
-							if (/\n/.test(e)) {
-								a[i] = e.split(/\n/);
-							}
-						});
-					}
-				}]
+				// plugins: [{
+				// 	beforeInit: function(chart) {
+				// 		chart.data.labels.forEach(function(e, i, a) {
+				// 			if (/\n/.test(e)) {
+				// 				a[i] = e.split(/\n/);
+				// 			}
+				// 		});
+				// 	}
+				// }]
 			});
 		}
 	});

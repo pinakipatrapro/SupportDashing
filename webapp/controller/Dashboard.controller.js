@@ -4,7 +4,8 @@ sap.ui.define([
 	"pinaki/sap/com/SupportDashing/widgets/IssuesOverPastWeekController",
 	"pinaki/sap/com/SupportDashing/widgets/IRTAlertController",
 	"pinaki/sap/com/SupportDashing/widgets/IssueCategoryController",
-], function(BaseController,CurrentIssueStatusController,IssuesOverPastWeekController,IRTAlertController,IssueCategoryController) {
+	"pinaki/sap/com/SupportDashing/widgets/LatestIssueListController",
+], function(BaseController,CurrentIssueStatusController,IssuesOverPastWeekController,IRTAlertController,IssueCategoryController,LatestIssueListController) {
 	"use strict";
 
 	return BaseController.extend("pinaki.sap.com.SupportDashing.controller.Dashboard", {

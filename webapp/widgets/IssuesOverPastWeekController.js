@@ -36,7 +36,7 @@ sap.ui.define([
 		},
 		generateDataset: function(model, lowerRange, upperRange) {
 			return {
-				labels: model.getData().currentIssueByCustomer.aDistinctCustomer.slice(lowerRange, upperRange),
+				labels: model.getData().issuesOverPastWeek.aDistinctCustomer.slice(lowerRange, upperRange),
 				datasets: [{
 					label: "Issues",
 					backgroundColor: 'rgba(168, 234, 255,.1)',

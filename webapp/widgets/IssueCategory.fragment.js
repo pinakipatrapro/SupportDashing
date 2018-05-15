@@ -4,7 +4,7 @@ sap.ui.jsfragment("pinaki.sap.com.SupportDashing.widgets.IssueCategory", {
 			layoutData : new sap.ui.layout.GridData({
 				span:"L4 M12 S12"
 			}),
-			content: '<canvas id="idIssueCategory"  height="150px"></canvas>'
+			content: '<canvas id="idIssueCategory"  height="200px"></canvas>'
 		});
 	}
 });

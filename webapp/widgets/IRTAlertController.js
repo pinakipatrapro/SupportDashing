@@ -5,7 +5,7 @@ sap.ui.define([
 
 	return BaseController.extend("pinaki.sap.com.SupportDashing.widgets.IRTAlert", {
 		loadChart: function(model, chartId) {
-			var maxBars =7;
+			var maxBars = 7;
 
 			if (window.IRTAlert)
 				window.clearInterval(window.IRTAlert);
@@ -42,7 +42,7 @@ sap.ui.define([
 					backgroundColor: "rgba(67, 0, 252,.2)",
 					borderColor: "rgb(67, 0, 252)",
 					data: model.getData().expiringIRT.aCount.slice(lowerRange, upperRange),
-					type: 'radar'
+					type: 'bar'
 				}]
 			};
 		},
@@ -51,7 +51,10 @@ sap.ui.define([
 				title: {
 					display: true,
 					text: 'IRT Alerts',
-					fontColor: 'white'
+					fontColor: 'white',
+					padding: 30,
+					fontSize : 14,
+					fontFamily : "Verdana"
 				},
 				legend: {
 					display: false
@@ -67,36 +70,33 @@ sap.ui.define([
 						datasets.forEach(function(dataset, i) {
 							ctx.font = "15px";
 							switch (dataset.type) {
-								case "radar":
+								case "bar":
 									ctx.fillStyle = "white";
 									chart.getDatasetMeta(i).data.forEach(function(p, j) {
-										ctx.fillText(datasets[i].data[j], p._model.x, p._model.y + 20);
+										if (datasets[i].data[j] > 0) {
+											ctx.fillText(datasets[i].data[j], p._model.x, p._model.y - 20);
+										}
 									});
 									break;
 							}
 						});
 					}
 				},
-				scale: {
-					pointLabels: {
-						fontSize: 12
-					},
-					ticks: {
-						display: false,
-						beginAtZero: true
-					}
-				},
-				elements: {
-					line: {
-						tension: 0.000001
-					}
+				scales: {
+					yAxes: [{
+						display: true,
+						ticks: {
+							suggestedMin: 0, // minimum will be 0, unless there is a lower value.
+							beginAtZero: true // minimum value will be 0.
+						}
+					}]
 				},
 				responsive: true
 			};
 		},
 		generateChart: function(dataset, options, ctx) {
 			return new Chart(ctx, {
-				type: 'radar',
+				type: 'bar',
 				data: dataset,
 				options: options,
 				plugins: [{

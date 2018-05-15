@@ -116,12 +116,14 @@ sap.ui.define([
 			var aInProcessStatus = [];
 			aCurrentIssueData = this.getDistinctIssues(aCurrentIssueData);
 			aCurrentIssueData.forEach(function(e) {
-				if (aDistinctCustomer.indexOf(e.CUST_NAME) < 0) {
-					aDistinctCustomer.push(e.CUST_NAME);
+				if (aDistinctCustomer.indexOf(e.CATEGORY) < 0) {
+					if(e.STATUS_KEY === statusKey.NEW || e.STATUS_KEY === statusKey.INPROCESS){
+						aDistinctCustomer.push(e.CATEGORY);
+					}
 					aNewStatus.push(0);
 					aInProcessStatus.push(0);
 				}
-				var index = aDistinctCustomer.indexOf(e.CUST_NAME);
+				var index = aDistinctCustomer.indexOf(e.CATEGORY);
 				if (e.STATUS_KEY === statusKey.NEW) {
 					if (!aNewStatus[index]) {
 						aNewStatus[index] = 0;
@@ -169,6 +171,9 @@ sap.ui.define([
 				aDistinctCustomer.push(key);
 				aCount.push(groupedIssuesByCustomer[key].length);
 			});
+			for (var l = 0; l < aDistinctCustomer.length; l++) {
+				aDistinctCustomer[l] = aDistinctCustomer[l].split(' ').join('\n');
+			}
 			this.getView().getModel().setData({
 				"issuesOverPastWeek": {
 					aDistinctCustomer: aDistinctCustomer,
@@ -198,6 +203,9 @@ sap.ui.define([
 				aDistinctCustomer.push(key);
 				aCount.push(groupedIssuesByCustomer[key].length);
 			});
+			for (var l = 0; l < aDistinctCustomer.length; l++) {
+				aDistinctCustomer[l] = aDistinctCustomer[l].split(' ').join('\n');
+			}
 			this.getView().getModel().setData({
 				"expiringIRT": {
 					aDistinctCustomer: aDistinctCustomer,
@@ -226,6 +234,10 @@ sap.ui.define([
 					aCount: aCount
 				}
 			}, true);
+		},
+		sortByPriority : function(aCurrentIssueData){
+			aCurrentIssueData = aCurrentIssueData.sort(function(a,b) {return (a.CREATE_DATE < b.CREATE_DATE) ? 1 : ((b.CREATE_DATE > a.CREATE_DATE) ? -1 : 0);} );
+			
 		}
 	});
 });
