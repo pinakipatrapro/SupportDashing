@@ -18,7 +18,7 @@
 						</l:layoutData>
 						<core:Fragment fragmentName="pinaki.sap.com.SupportDashing.widgets.IssuesOverPastWeek" type="JS"/>	
 						<core:Fragment fragmentName="pinaki.sap.com.SupportDashing.widgets.IRTAlert" type="JS"/>
-						<!--<core:Fragment fragmentName="pinaki.sap.com.SupportDashing.widgets.IssueCategory" type="JS"/>-->
+						<core:Fragment fragmentName="pinaki.sap.com.SupportDashing.widgets.MPTAlert" type="JS"/>
 					</l:VerticalLayout>
 					<!--<core:Fragment fragmentName="pinaki.sap.com.SupportDashing.widgets.LatestIssueList" type="JS"/>-->
 				</l:Grid>

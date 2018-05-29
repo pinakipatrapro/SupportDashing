@@ -3,14 +3,14 @@ sap.ui.define([
 ], function(BaseController) {
 	"use strict";
 
-	return BaseController.extend("pinaki.sap.com.SupportDashing.widgets.IRTAlert", {
+	return BaseController.extend("pinaki.sap.com.SupportDashing.widgets.MPTAlert", {
 		loadChart: function(model, chartId) {
 			var maxBars =5;
 
-			if (window.IRTAlert)
-				window.clearInterval(window.IRTAlert);
+			if (window.MPTAlert)
+				window.clearInterval(window.MPTAlert);
 
-			var totalDatasets = model.getData().expiringIRT.aDistinctCustomer;
+			var totalDatasets = model.getData().expiringMPT.aDistinctCustomer;
 			if (totalDatasets.length < maxBars) {
 				var options = this.generateOptions();
 				var dataset = this.generateDataset(model, 0, maxBars);
@@ -19,7 +19,7 @@ sap.ui.define([
 			} else {
 				var lowerRange = 0;
 				var upperRange = maxBars;
-				window.IRTAlert = setInterval(function() {
+				window.MPTAlert = setInterval(function() {
 					if (upperRange > totalDatasets.length) {
 						upperRange = 0;
 					}
@@ -36,13 +36,13 @@ sap.ui.define([
 		},
 		generateDataset: function(model, lowerRange, upperRange) {
 			return {
-				labels: model.getData().expiringIRT.aDistinctCustomer.slice(lowerRange, upperRange),
+				labels: model.getData().expiringMPT.aDistinctCustomer.slice(lowerRange, upperRange),
 				datasets: [{
-					label: "Open IRT",
-					backgroundColor: "rgba(67, 0, 252,.2)",
+					label: "Open MPT",
+					backgroundColor: "rgba(56, 132, 255, .2)",
 					borderWidth:2,
-					borderColor: "rgb(67, 0, 252)",
-					data: model.getData().expiringIRT.aCount.slice(lowerRange, upperRange),
+					borderColor: "rgb(56, 132, 255)",
+					data: model.getData().expiringMPT.aCount.slice(lowerRange, upperRange),
 					type: 'bar'
 				}]
 			};
@@ -51,7 +51,7 @@ sap.ui.define([
 			return {
 				title: {
 					display: true,
-					text: 'IRT Alerts',
+					text: 'MPT Alerts',
 					fontColor: 'white',
 					padding: 30,
 					fontSize : 14,
@@ -85,6 +85,7 @@ sap.ui.define([
 				},
 				scales: {
 					xAxes: [{
+						barPercentage: 0.6,
 						ticks: {
 							autoSkip: false,
 							maxRotation: 0,

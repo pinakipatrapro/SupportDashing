@@ -13,34 +13,36 @@ sap.ui.define([
 			parameters: "search_id"
 		}
 	};
-	var dataCustSearch = [{
-		type: "customer",
-		value: "314472"
-	}, {
-		type: "customer",
-		value: "287386"
-	}, {
-		type: "customer",
-		value: "186849"
-	}, {
-		type: "customer",
-		value: "1688831"
-	}, {
-		type: "customer",
-		value: "0001034417"
-	}, {
-		type: "customer",
-		value: "0001011896"
-	}, {
-		type: "customer",
-		value: "0000026075"
-	}, {
-		type: "customer",
-		value: "1372500"
-	}/*, {
-		type: "search",
-		value: "0090FAE68C681ED895BEFA93B41080D4"
-	}*/];
+	var dataCustSearch = [
+		{
+			type: "customer",
+			value: "314472"
+		}, {
+			type: "customer",
+			value: "287386"
+		}, {
+			type: "customer",
+			value: "186849"
+		}, {
+			type: "customer",
+			value: "1688831"
+		}, {
+			type: "customer",
+			value: "0001034417"
+		}, {
+			type: "customer",
+			value: "0001011896"
+		}, {
+			type: "customer",
+			value: "0000026075"
+		}, {
+			type: "customer",
+			value: "1372500"
+		}/*,{
+			type: "search",
+			value: "0090FAE68C681ED895BEFA93B41080D4"
+		}*/
+	];
 	var statusKey = {
 		NEW: "E0001",
 		INPROCESS: "E0002"
@@ -106,24 +108,28 @@ sap.ui.define([
 			}
 			this.groupByDate(aCurrentIssueData);
 			this.getIrtAlert(aCurrentIssueData);
+			this.getMptAlert(aCurrentIssueData);
 			this.incidentCategory(aCurrentIssueData);
 			return aCurrentIssueData;
 		},
 		groupByCustomer: function(aCurrentIssueData) {
 			//Move logic to web Worker to improve performance
 			var aDistinctCustomer = [];
+			var aDistinctCategory = [];
 			var aNewStatus = [];
 			var aInProcessStatus = [];
+			var aPriorityKey = [];
 			aCurrentIssueData = this.getDistinctIssues(aCurrentIssueData);
 			aCurrentIssueData.forEach(function(e) {
-				if (aDistinctCustomer.indexOf(e.CATEGORY) < 0) {
-					if(e.STATUS_KEY === statusKey.NEW || e.STATUS_KEY === statusKey.INPROCESS){
-						aDistinctCustomer.push(e.CATEGORY);
+				if (aDistinctCategory.indexOf(e.CATEGORY) < 0) {
+					if (e.STATUS_KEY === statusKey.NEW || e.STATUS_KEY === statusKey.INPROCESS) {
+						aDistinctCategory.push(e.CATEGORY);
+						aDistinctCustomer.push(e.CUST_NAME);
 					}
 					aNewStatus.push(0);
 					aInProcessStatus.push(0);
 				}
-				var index = aDistinctCustomer.indexOf(e.CATEGORY);
+				var index = aDistinctCategory.indexOf(e.CATEGORY);
 				if (e.STATUS_KEY === statusKey.NEW) {
 					if (!aNewStatus[index]) {
 						aNewStatus[index] = 0;
@@ -135,16 +141,39 @@ sap.ui.define([
 					}
 					aInProcessStatus[index] = aInProcessStatus[index] + 1;
 				}
-			});
-			for (var l = 0; l < aDistinctCustomer.length; l++) {
-				aDistinctCustomer[l] = aDistinctCustomer[l].split(' ').join('\n');
-			}
-			return {
-				aDistinctCustomer: aDistinctCustomer,
-				aNewStatus: aNewStatus,
-				aInProcessStatus: aInProcessStatus
+				//Set Priority Status
+				if (!aPriorityKey[index]) {
+					aPriorityKey[index] = {
+						"veryHigh": 0,
+						"high": 0,
+						"medium": 0,
+						"low": 0
+					};
+				}
+				if (e.STATUS_KEY === statusKey.INPROCESS || e.STATUS_KEY === statusKey.NEW) {
+					if (e.PRIORITY_KEY === "1") {
+						aPriorityKey[index]["veryHigh"] = aPriorityKey[index]["veryHigh"] + 1;
+					} else if (e.PRIORITY_KEY === "3") {
+						aPriorityKey[index]["high"] = aPriorityKey[index]["high"] + 1;
+					} else if (e.PRIORITY_KEY === "5") {
+						aPriorityKey[index]["medium"] = aPriorityKey[index]["medium"] + 1;
+					} else if (e.PRIORITY_KEY === "9") {
+						aPriorityKey[index]["low"] = aPriorityKey[index]["low"] + 1;
+					}
 
-			};
+				}
+			});
+			var oDistinctCustomer = [];
+			for (var l = 0; l < aDistinctCategory.length; l++) {
+				oDistinctCustomer.push({
+					category: aDistinctCategory[l],
+					inProcessStatus: aInProcessStatus[l],
+					newStatus: aNewStatus[l],
+					priorityKey: aPriorityKey[l],
+					customer: aDistinctCustomer[l]
+				});
+			}
+			return oDistinctCustomer;
 		},
 		groupByDate: function(aCurrentIssueData) {
 			//Move logic to web Worker to improve performance
@@ -213,19 +242,55 @@ sap.ui.define([
 				}
 			}, true);
 		},
-		incidentCategory : function(aCurrentIssueData){
-			var aCategories = ["Very High","High","Medium","Low"];
-			var aCount = [0,0,0,0];
-			aCurrentIssueData.forEach(function(e){
-				switch(e.PRIORITY_KEY){
+		getMptAlert: function(aCurrentIssueData) {
+			var aExpiringMPT = [];
+			var currentDate = new Date().toISOString().slice(0, 10).replace(/-/g, "") + "000000";
+			aCurrentIssueData.forEach(function(e) {
+				if (e.MPT_EXPIRY > currentDate) {
+					aExpiringMPT.push(e);
+				}
+			});
+			//Group By Customer
+			var groupedIssuesByCustomer = {};
+			aExpiringMPT.forEach(function(e) {
+				if (!groupedIssuesByCustomer[e.CUST_NAME]) {
+					groupedIssuesByCustomer[e.CUST_NAME] = [];
+				}
+				groupedIssuesByCustomer[e.CUST_NAME].push(e);
+			});
+			var aDistinctCustomer = [];
+			var aCount = [];
+			Object.keys(groupedIssuesByCustomer).forEach(function(key, index) {
+				aDistinctCustomer.push(key);
+				aCount.push(groupedIssuesByCustomer[key].length);
+			});
+			for (var l = 0; l < aDistinctCustomer.length; l++) {
+				aDistinctCustomer[l] = aDistinctCustomer[l].split(' ').join('\n');
+			}
+			this.getView().getModel().setData({
+				"expiringMPT": {
+					aDistinctCustomer: aDistinctCustomer,
+					aCount: aCount
+				}
+			}, true);
+		},
+		incidentCategory: function(aCurrentIssueData) {
+			var aCategories = ["Very High", "High", "Medium", "Low"];
+			var aCount = [0, 0, 0, 0];
+			aCurrentIssueData.forEach(function(e) {
+				switch (e.PRIORITY_KEY) {
 					case "1":
-						aCount[0] = aCount[0] + 1;break;
+						aCount[0] = aCount[0] + 1;
+						break;
 					case "3":
-						aCount[1] = aCount[1] + 1;break;
+						aCount[1] = aCount[1] + 1;
+						break;
 					case "5":
-						aCount[2] = aCount[2] + 1;break;
+						aCount[2] = aCount[2] + 1;
+						break;
 					case "9":
-						aCount[3] = aCount[3] + 1;break;
+						aCount[3] = aCount[3] + 1;
+						break;
 				}
 			});
 			this.getView().getModel().setData({
@@ -235,9 +300,11 @@ sap.ui.define([
 				}
 			}, true);
 		},
-		sortByPriority : function(aCurrentIssueData){
-			aCurrentIssueData = aCurrentIssueData.sort(function(a,b) {return (a.CREATE_DATE < b.CREATE_DATE) ? 1 : ((b.CREATE_DATE > a.CREATE_DATE) ? -1 : 0);} );
-			
+		sortByPriority: function(aCurrentIssueData) {
+			aCurrentIssueData = aCurrentIssueData.sort(function(a, b) {
+				return (a.CREATE_DATE < b.CREATE_DATE) ? 1 : ((b.CREATE_DATE > a.CREATE_DATE) ? -1 : 0);
+			});
+
 		}
 	});
 });

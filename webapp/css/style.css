@@ -6,6 +6,40 @@ html.sap-desktop .sapMShellCentralBox {
     background-color: #427cac00;
 }
 .steelBG {
-background-image: linear-gradient(to bottom, #000000, #030202, #070404, #0a0606, #0d0807);
-	
+	background-image: linear-gradient(to bottom, #000000, #030202, #070404, #0a0606, #0d0807);
+}
+.sapMTBStandard {
+    border-bottom: 0px solid #cccccc;
+}
+
+.sapMLIB {
+    background: #984e4e00;
+    border-bottom: 0px solid #e5e5e5;
+}
+html.sap-desktop ::-webkit-scrollbar {
+    background-color: #ffffff00;
+}
+
+html.sap-desktop ::-webkit-scrollbar-corner {
+    background-color: #ffffff00;
+}
+html.sap-desktop ::-webkit-scrollbar-thumb {
+    background-color: #b2b2b200;
+}
+.sapMLIBShowSeparator>td {
+    border-top: 0px solid #e5e5e5;
+}
+
+.sapMLabel {
+    color: #fffefe ! important;
+    font-family: sans-serif;
+}
+.sapMListShowSeparatorsAll .sapMLIBShowSeparator:last-child>td, .sapMListShowSeparatorsAll .sapMListTblSubRow:last-child>td {
+    border-bottom: 0px solid #cccccc;
+}
+.sapUiSizeCompact .sapMListTblCell {
+    border: .3px solid #0e0e0e;
+}
+.redBG{
+	background-color : RGBA(255,0,0,.3);
 }
