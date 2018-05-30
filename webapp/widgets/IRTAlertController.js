@@ -39,9 +39,9 @@ sap.ui.define([
 				labels: model.getData().expiringIRT.aDistinctCustomer.slice(lowerRange, upperRange),
 				datasets: [{
 					label: "Open IRT",
-					backgroundColor: "rgba(67, 0, 252,.2)",
+					backgroundColor: "rgba(255, 40, 51,.2)",
 					borderWidth:2,
-					borderColor: "rgb(67, 0, 252)",
+					borderColor: "rgb(255, 40, 51)",
 					data: model.getData().expiringIRT.aCount.slice(lowerRange, upperRange),
 					type: 'bar'
 				}]
@@ -52,7 +52,7 @@ sap.ui.define([
 				title: {
 					display: true,
 					text: 'IRT Alerts',
-					fontColor: 'white',
+					fontColor: '#bebebe',
 					padding: 30,
 					fontSize : 14,
 					fontFamily : "Verdana"

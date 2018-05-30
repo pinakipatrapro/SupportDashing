@@ -51,8 +51,10 @@ sap.ui.define([
 				title: {
 					display: true,
 					text: 'Issues over past week',
-					fontColor: 'white',
-					padding: 30
+					fontColor: '#bebebe',
+					padding: 30,
+					fontSize : 14,
+					fontFamily : "Verdana"
 				},
 				legend: {
 					display: false

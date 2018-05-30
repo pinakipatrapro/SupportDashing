@@ -7,7 +7,7 @@
 	xmlns:l="sap.ui.layout">
 	<App id="idAppControl" class="sapUiSizeCompact steelBG">
 		<pages> 
-			<Page showHeader="false">
+			<Page showHeader="false" enableScrolling ="true">
 				<l:Grid	defaultSpan="L8 M12 S12" width="100%">
 					<l:VerticalLayout>
 						<core:Fragment fragmentName="pinaki.sap.com.SupportDashing.widgets.CurrentIssueStatus" type="JS"/>
@@ -20,8 +20,13 @@
 						<core:Fragment fragmentName="pinaki.sap.com.SupportDashing.widgets.IRTAlert" type="JS"/>
 						<core:Fragment fragmentName="pinaki.sap.com.SupportDashing.widgets.MPTAlert" type="JS"/>
 					</l:VerticalLayout>
-					<!--<core:Fragment fragmentName="pinaki.sap.com.SupportDashing.widgets.LatestIssueList" type="JS"/>-->
 				</l:Grid>
+				<footer>
+					<Toolbar design="Transparent" >
+						<ToolbarSpacer/>
+						<Text id="idLastUpdated" class="lastUpdateStyle"/>
+					</Toolbar>
+				</footer>
 			</Page>
 		</pages>
 	</App>

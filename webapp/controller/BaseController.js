@@ -14,7 +14,7 @@ sap.ui.define([
 		}
 	};
 	var dataCustSearch = [
-		{
+		/*{
 			type: "customer",
 			value: "314472"
 		}, {
@@ -38,10 +38,11 @@ sap.ui.define([
 		}, {
 			type: "customer",
 			value: "1372500"
-		}/*,{
+		},*/
+		{
 			type: "search",
-			value: "0090FAE68C681ED895BEFA93B41080D4"
-		}*/
+			value: "0090FAE68D241ED898E5030CF33B40DC"
+		}
 	];
 	var statusKey = {
 		NEW: "E0001",
@@ -54,6 +55,7 @@ sap.ui.define([
 				Promise.all(aCurrentIssuePromise).then(function(e) {
 					this.processCurrentIssueData(e);
 					resolve();
+					this.getView().byId("idLastUpdated").setText("Last updated on "+ new Date().toString().slice(0,24));
 				}.bind(this)).catch(function(e) {
 					reject();
 				}.bind(this));
@@ -245,8 +247,9 @@ sap.ui.define([
 		getMptAlert: function(aCurrentIssueData) {
 			var aExpiringMPT = [];
 			var currentDate = new Date().toISOString().slice(0, 10).replace(/-/g, "") + "000000";
+			var nextWeekDate = new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate()+7).toISOString().slice(0, 10).replace(/-/g, "") + "000000";
 			aCurrentIssueData.forEach(function(e) {
-				if (e.MPT_EXPIRY > currentDate) {
+				if (e.MPT_EXPIRY > currentDate && e.MPT_EXPIRY < nextWeekDate) {
 					aExpiringMPT.push(e);
 				}
 			});

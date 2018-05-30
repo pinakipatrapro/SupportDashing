@@ -6,7 +6,7 @@ html.sap-desktop .sapMShellCentralBox {
     background-color: #427cac00;
 }
 .steelBG {
-	background-image: linear-gradient(to bottom, #000000, #030202, #070404, #0a0606, #0d0807);
+  background-image: linear-gradient(to bottom, #000000, #030202, #070404, #0a0606, #0d0807);
 }
 .sapMTBStandard {
     border-bottom: 0px solid #cccccc;
@@ -17,7 +17,7 @@ html.sap-desktop .sapMShellCentralBox {
     border-bottom: 0px solid #e5e5e5;
 }
 html.sap-desktop ::-webkit-scrollbar {
-    background-color: #ffffff00;
+    background-color: #ffffff00 ! important;
 }
 
 html.sap-desktop ::-webkit-scrollbar-corner {
@@ -41,5 +41,33 @@ html.sap-desktop ::-webkit-scrollbar-thumb {
     border: .3px solid #0e0e0e;
 }
 .redBG{
-	background-color : RGBA(255,0,0,.3);
+  background-color : RGBA(255,0,0,.3);
+}
+.lastUpdateStyle{
+    text-shadow: none ! important;
+    color: #c4c4c4  ! important;
+}
+
+html.sap-desktop .sapMScrollContVH::-webkit-scrollbar {
+    width: 0rem;
+    height: 0rem;
+}
+
+.sapMScrollCont {
+    overflow: hidden ! important;
+}
+
+
+
+
+
+
+.sapMListTbl .sapMText, .sapMListTbl .sapMLabel {
+    font-size: 1rem;
+    color: #fefefe;
+}
+
+.sapMListTbl th {
+    background: #070000;
+    border-bottom: 1px solid #e5e5e5;
 }

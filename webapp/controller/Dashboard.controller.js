@@ -18,6 +18,16 @@ sap.ui.define([
 				new MPTAlertController().loadChart(this.getView().getModel(),"idMPTAlert");
 				// new IssueCategoryController().loadChart(this.getView().getModel(),"idIssueCategory");
 			}.bind(this));
+			
+			setInterval(function(){
+				this.loadData().then(function(){
+					// new CurrentIssueStatusController().loadChart(this.getView().getModel(),"idCurrentStatusChart");
+					new IssuesOverPastWeekController().loadChart(this.getView().getModel(),"idIssuesOverPastWeek");
+					new IRTAlertController().loadChart(this.getView().getModel(),"idIRTAlert");
+					new MPTAlertController().loadChart(this.getView().getModel(),"idMPTAlert");
+					// new IssueCategoryController().loadChart(this.getView().getModel(),"idIssueCategory");
+				}.bind(this));
+			}.bind(this),3*60*1000);
 		}
 	});
 });

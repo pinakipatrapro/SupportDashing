@@ -51,8 +51,8 @@ sap.ui.define([
 			return {
 				title: {
 					display: true,
-					text: 'MPT Alerts',
-					fontColor: 'white',
+					text: 'MPT Alerts (Expiring in 7 Days)',
+					fontColor: '#bebebe',
 					padding: 30,
 					fontSize : 14,
 					fontFamily : "Verdana"
