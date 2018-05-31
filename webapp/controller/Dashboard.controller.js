@@ -27,7 +27,7 @@ sap.ui.define([
 					new MPTAlertController().loadChart(this.getView().getModel(),"idMPTAlert");
 					// new IssueCategoryController().loadChart(this.getView().getModel(),"idIssueCategory");
 				}.bind(this));
-			}.bind(this),3*60*1000);
+			}.bind(this),5*60*1000);
 		}
 	});
 });

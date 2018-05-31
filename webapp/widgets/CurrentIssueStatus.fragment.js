@@ -2,39 +2,34 @@ sap.ui.jsfragment("pinaki.sap.com.SupportDashing.widgets.CurrentIssueStatus", {
 	createContent: function(oController) {
 		return [
 			new sap.m.Table({
-				showNoData : false,
+				showNoData: false,
 				columns: [
 					new sap.m.Column({
 						width: "15rem",
-						hAlign:"Center",
 						mergeDuplicates: true,
 						header: new sap.m.Text({
 							text: "Customer"
 						})
 					}),
 					new sap.m.Column({
-						hAlign:"Center",	
 						width: "15rem",
 						header: new sap.m.Text({
 							text: "Component"
 						})
 					}),
 					new sap.m.Column({
-						hAlign:"Center",
-						width: "6rem",
+						width: "4rem",
 						header: new sap.m.Text({
 							text: "In Process"
 						})
 					}),
 					new sap.m.Column({
-						hAlign:"Center",
 						width: "4rem",
 						header: new sap.m.Text({
 							text: "New"
 						})
 					}),
 					new sap.m.Column({
-						hAlign:"Center",
 						width: "6rem",
 						header: new sap.m.Text({
 							text: "Priority"
@@ -47,27 +42,23 @@ sap.ui.jsfragment("pinaki.sap.com.SupportDashing.widgets.CurrentIssueStatus", {
 				vertical: true,
 				content: [
 					new sap.m.Table({
+						showNoData: false,
 						columns: [
 							new sap.m.Column({
-								hAlign:"Center",
 								width: "15rem",
-								mergeDuplicates: true,
+								mergeDuplicates: true
 							}),
 							new sap.m.Column({
-								hAlign:"Center",
-								width: "15rem",
+								width: "15rem"
 							}),
 							new sap.m.Column({
-								hAlign:"Center",
-								width: "6rem",
+								width: "6rem"
 							}),
 							new sap.m.Column({
-								hAlign:"Center",
-								width: "4rem",
+								width: "4rem"
 							}),
 							new sap.m.Column({
-								hAlign:"Center",
-								width: "6rem",
+								width: "6rem"
 							})
 						],
 						items: {
@@ -104,30 +95,28 @@ sap.ui.jsfragment("pinaki.sap.com.SupportDashing.widgets.CurrentIssueStatus", {
 											new sap.suite.ui.microchart.StackedBarMicroChartBar({
 												value: "{priorityKey/veryHigh}",
 												displayValue: "{priorityKey/veryHigh}",
-												valueColor: "rgb(255, 2, 78)"
+												valueColor: "#800000"
 											}),
 											new sap.suite.ui.microchart.StackedBarMicroChartBar({
 												value: "{priorityKey/high}",
 												displayValue: "{priorityKey/high}",
-												valueColor: "rgb(255, 81, 81)"
+												valueColor: "#CD853F"
 											}),
 											new sap.suite.ui.microchart.StackedBarMicroChartBar({
 												value: "{priorityKey/medium}",
 												displayValue: "{priorityKey/medium}",
-												valueColor: "rgb(210, 105, 0)"
+												valueColor: "#DAA520"
 											}),
 											new sap.suite.ui.microchart.StackedBarMicroChartBar({
 												value: "{priorityKey/low}",
 												displayValue: "{priorityKey/low}",
-												valueColor: "rgb(211, 186, 0)"
+												valueColor: "#696969"
 											})
 										]
 									})
 								]
 							}),
-							sorter: {
-								path: 'customer'
-							}
+							sorter: new sap.ui.model.Sorter("customer", false)
 						}
 					}).addEventDelegate({
 						"onAfterRendering": function(e) {

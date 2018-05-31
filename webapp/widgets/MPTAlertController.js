@@ -85,7 +85,6 @@ sap.ui.define([
 				},
 				scales: {
 					xAxes: [{
-						barPercentage: 0.6,
 						ticks: {
 							autoSkip: false,
 							maxRotation: 0,
